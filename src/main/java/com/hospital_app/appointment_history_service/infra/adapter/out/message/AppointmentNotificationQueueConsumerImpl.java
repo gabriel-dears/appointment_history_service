@@ -23,10 +23,7 @@ public class AppointmentNotificationQueueConsumerImpl {
     public void consume(AppointmentMessage appointmentMessage) {
         AppointmentHistory history = messageAppointmentHistoryMapper.toHistory(appointmentMessage);
         createAppointmentHistoryUseCase.createAppointmentHistory(history);
-        // TODO: integrate with postgres -> pom deps + docker compose container !!!!!!!!!!
         // TODO: refactor tests
-        // TODO: add to the main pom.xml from hospital_app project
-        // TODO: create JpaAppointmentHistoryEntity and domain model AppointmentHistory
         // TODO: expose simple graphql interaction
         // TODO: create past appointments interaction
         // TODO: create future appointments interaction

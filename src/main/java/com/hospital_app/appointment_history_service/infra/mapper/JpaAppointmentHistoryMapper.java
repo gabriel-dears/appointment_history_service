@@ -10,6 +10,7 @@ public class JpaAppointmentHistoryMapper {
     public JpaAppointmentHistoryEntity toEntity(AppointmentHistory appointmentHistory) {
         JpaAppointmentHistoryEntity jpaAppointmentHistoryEntity = new JpaAppointmentHistoryEntity();
         jpaAppointmentHistoryEntity.setId(appointmentHistory.getId());
+        jpaAppointmentHistoryEntity.setAppointmentId(appointmentHistory.getAppointmentId());
         jpaAppointmentHistoryEntity.setNotes(appointmentHistory.getNotes());
         jpaAppointmentHistoryEntity.setDateTime(appointmentHistory.getDateTime());
         jpaAppointmentHistoryEntity.setDoctorId(appointmentHistory.getDoctorId());
@@ -20,6 +21,7 @@ public class JpaAppointmentHistoryMapper {
         jpaAppointmentHistoryEntity.setPatientEmail(appointmentHistory.getPatientEmail());
         jpaAppointmentHistoryEntity.setVersion(appointmentHistory.getVersion());
         jpaAppointmentHistoryEntity.setReceivedAt(appointmentHistory.getReceivedAt());
+        jpaAppointmentHistoryEntity.setStatus(appointmentHistory.getStatus());
         return jpaAppointmentHistoryEntity;
     }
 
@@ -28,13 +30,15 @@ public class JpaAppointmentHistoryMapper {
         appointmentHistory.setId(jpaAppointmentHistoryEntity.getId());
         appointmentHistory.setNotes(jpaAppointmentHistoryEntity.getNotes());
         appointmentHistory.setDateTime(jpaAppointmentHistoryEntity.getDateTime());
+        appointmentHistory.setPatientId(jpaAppointmentHistoryEntity.getPatientId());
         appointmentHistory.setDoctorId(jpaAppointmentHistoryEntity.getDoctorId());
         appointmentHistory.setDoctorName(jpaAppointmentHistoryEntity.getDoctorName());
-        appointmentHistory.setPatientId(jpaAppointmentHistoryEntity.getPatientId());
         appointmentHistory.setPatientName(jpaAppointmentHistoryEntity.getPatientName());
         appointmentHistory.setPatientEmail(jpaAppointmentHistoryEntity.getPatientEmail());
         appointmentHistory.setVersion(jpaAppointmentHistoryEntity.getVersion());
         appointmentHistory.setReceivedAt(jpaAppointmentHistoryEntity.getReceivedAt());
+        appointmentHistory.setStatus(jpaAppointmentHistoryEntity.getStatus());
+        appointmentHistory.setAppointmentId(jpaAppointmentHistoryEntity.getAppointmentId());
         return appointmentHistory;
     }
 }
