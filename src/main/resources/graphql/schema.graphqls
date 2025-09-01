@@ -1,0 +1,91 @@
+# =====================
+# Scalars
+# =====================
+scalar UUID
+scalar LocalDateTime
+
+# =====================
+# Pagination
+# =====================
+type PageInfo {
+    pageNumber: Int!
+    pageSize: Int!
+    totalPages: Int!
+    totalElements: Int!
+    isFirst: Boolean!
+    isLast: Boolean!
+}
+
+# Generic page container for AppointmentHistory
+type AppointmentHistoryConnection {
+    pageInfo: PageInfo!
+    content: [AppointmentHistoryResponse!]!
+}
+
+# Wrapper if you want to include extra metadata, e.g. appointmentId
+type AppointmentHistoryWithContext {
+    appointmentId: UUID!
+    history: AppointmentHistoryConnection!
+}
+
+# =====================
+# Domain Types
+# =====================
+type AppointmentHistoryResponse {
+    id: UUID!
+    appointmentId: UUID!
+    patientId: UUID!
+    patientEmail: String!
+    patientName: String!
+    doctorId: UUID!
+    doctorName: String!
+    dateTime: LocalDateTime!
+    status: String!
+    notes: String!
+    version: Int!
+    receivedAt: LocalDateTime!
+}
+
+# =====================
+# Queries
+# =====================
+type Query {
+    pastAppointmentHistoryByAppointmentId(
+        id: UUID!,
+        lastVersionOnly: Boolean = true,
+        page: Int = 0,
+        size: Int = 10
+    ): AppointmentHistoryConnection!
+
+    futureAppointmentHistoryByAppointmentId(
+        id: UUID!,
+        lastVersionOnly: Boolean = true,
+        page: Int = 0,
+        size: Int = 10
+    ): AppointmentHistoryConnection!
+
+    allAppointmentHistoryByAppointmentId(
+        id: UUID!,
+        lastVersionOnly: Boolean = true,
+        page: Int = 0,
+        size: Int = 10
+    ): AppointmentHistoryConnection!
+
+    pastAppointmentHistories(
+        lastVersionOnly: Boolean = true,
+        page: Int = 0,
+        size: Int = 10
+    ): [AppointmentHistoryWithContext!]!
+
+    futureAppointmentHistories(
+        lastVersionOnly: Boolean = true,
+        page: Int = 0,
+        size: Int = 10
+    ): [AppointmentHistoryWithContext!]!
+
+    allAppointmentHistories(
+        lastVersionOnly: Boolean = true,
+        page: Int = 0,
+        size: Int = 10
+    ): [AppointmentHistoryWithContext!]!
+}
