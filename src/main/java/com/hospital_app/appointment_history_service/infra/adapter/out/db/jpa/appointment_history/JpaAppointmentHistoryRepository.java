@@ -63,4 +63,43 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
 
     Page<JpaAppointmentHistoryEntity> findByAppointmentIdAndDateTimeBefore(UUID appointmentId, OffsetDateTime now, Pageable pageable);
 
+    @Query("""
+            SELECT h
+                        FROM JpaAppointmentHistoryEntity h
+                          WHERE h.version = (
+                            SELECT MAX(h2.version)
+                            FROM JpaAppointmentHistoryEntity h2
+                            WHERE h2.appointmentId = h.appointmentId
+                          )
+            """)
+    Page<JpaAppointmentHistoryEntity> findAllByLastVersion(Pageable pageable);
+
+    @Query("""
+            SELECT h
+                        FROM JpaAppointmentHistoryEntity h
+                          WHERE h.version = (
+                            SELECT MAX(h2.version)
+                            FROM JpaAppointmentHistoryEntity h2
+                            WHERE h2.appointmentId = h.appointmentId
+                        )
+                        AND h.dateTime > :now
+            """)
+    Page<JpaAppointmentHistoryEntity> findAllByLastVersionFuture(OffsetDateTime now, Pageable pageable);
+
+    @Query("""
+            SELECT h
+                        FROM JpaAppointmentHistoryEntity h
+                          WHERE h.version = (
+                            SELECT MAX(h2.version)
+                            FROM JpaAppointmentHistoryEntity h2
+                            WHERE h2.appointmentId = h.appointmentId
+                        )
+                        AND h.dateTime < :now
+            """)
+    Page<JpaAppointmentHistoryEntity> findAllByLastVersionPast(OffsetDateTime now, Pageable pageable);
+
+    Page<JpaAppointmentHistoryEntity> findByDateTimeAfter(OffsetDateTime now, Pageable pageable);
+
+    Page<JpaAppointmentHistoryEntity> findByDateTimeBefore(OffsetDateTime now, Pageable pageable);
+
 }

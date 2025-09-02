@@ -11,4 +11,6 @@ public interface CustomAppointmentHistoryRepository {
     AppointmentHistory create(AppointmentHistory appointmentHistory);
 
     ApplicationPage<AppointmentHistory> findByAppointmentId(UUID appointmentId, boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope appointmentDateTimeScope);
+
+    ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope appointmentDateTimeScope);
 }

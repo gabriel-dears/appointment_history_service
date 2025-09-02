@@ -1,4 +1,4 @@
-package com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.query;
+package com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.query.id;
 
 import com.hospital_app.appointment_history_service.application.port.out.db.appointment_history.AppointmentHistoryByIdQueryPort;
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryEntity;

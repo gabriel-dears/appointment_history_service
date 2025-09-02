@@ -5,5 +5,6 @@ import com.hospital_app.appointment_history_service.infra.adapter.in.controller.
 public interface FindAllAppointmentHistoryUseCase {
     AppointmentHistoryWithContext execute(boolean lastVersionOnly,
                                           int page,
-                                          int size);
+                                          int size,
+                                          AppointmentDateTimeScope appointmentDateTimeScope);
 }
