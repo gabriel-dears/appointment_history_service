@@ -4,6 +4,8 @@ import com.hospital_app.appointment_history_service.domain.model.AppointmentHist
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryEntity;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 @Component
@@ -22,9 +24,15 @@ public class JpaAppointmentHistoryMapper {
         jpaAppointmentHistoryEntity.setPatientName(appointmentHistory.getPatientName());
         jpaAppointmentHistoryEntity.setPatientEmail(appointmentHistory.getPatientEmail());
         jpaAppointmentHistoryEntity.setVersion(appointmentHistory.getVersion());
-        jpaAppointmentHistoryEntity.setReceivedAt(appointmentHistory.getReceivedAt().atOffset(ZoneOffset.UTC));
+        handleReceivedAt(appointmentHistory.getReceivedAt(), jpaAppointmentHistoryEntity);
         jpaAppointmentHistoryEntity.setStatus(appointmentHistory.getStatus());
         return jpaAppointmentHistoryEntity;
+    }
+
+    private static void handleReceivedAt(LocalDateTime receivedAt, JpaAppointmentHistoryEntity jpaAppointmentHistoryEntity) {
+        if(receivedAt != null) {
+            jpaAppointmentHistoryEntity.setReceivedAt(receivedAt.atOffset(ZoneOffset.UTC));
+        }
     }
 
     public AppointmentHistory toDomain(JpaAppointmentHistoryEntity jpaAppointmentHistoryEntity) {
@@ -38,9 +46,16 @@ public class JpaAppointmentHistoryMapper {
         appointmentHistory.setPatientName(jpaAppointmentHistoryEntity.getPatientName());
         appointmentHistory.setPatientEmail(jpaAppointmentHistoryEntity.getPatientEmail());
         appointmentHistory.setVersion(jpaAppointmentHistoryEntity.getVersion());
-        appointmentHistory.setReceivedAt(jpaAppointmentHistoryEntity.getReceivedAt().toLocalDateTime());
+        handleReceivedAt(jpaAppointmentHistoryEntity.getReceivedAt(), appointmentHistory);
         appointmentHistory.setStatus(jpaAppointmentHistoryEntity.getStatus());
         appointmentHistory.setAppointmentId(jpaAppointmentHistoryEntity.getAppointmentId());
         return appointmentHistory;
     }
+
+    private static void handleReceivedAt(OffsetDateTime receivedAt, AppointmentHistory appointmentHistory) {
+        if(receivedAt != null) {
+            appointmentHistory.setReceivedAt(receivedAt.toLocalDateTime());
+        }
+    }
+
 }
