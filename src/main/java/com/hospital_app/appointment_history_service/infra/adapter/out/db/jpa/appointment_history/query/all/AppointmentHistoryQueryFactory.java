@@ -2,9 +2,11 @@ package com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.ap
 
 import com.hospital_app.appointment_history_service.application.port.in.appointment_history.AppointmentDateTimeScope;
 import com.hospital_app.appointment_history_service.application.port.out.db.appointment_history.AppointmentHistoryQueryPort;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Component
 public class AppointmentHistoryQueryFactory {
 
     private final Map<AppointmentDateTimeScope, AppointmentHistoryQueryPort> strategies;
