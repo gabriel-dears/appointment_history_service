@@ -8,5 +8,6 @@ public interface FindByIdAppointmentHistoryUseCase {
     AppointmentHistoryConnection execute(UUID id,
                                          boolean lastVersionOnly,
                                          int page,
-                                         int size);
+                                         int size,
+                                         AppointmentDateTimeScope appointmentDateTimeScope);
 }

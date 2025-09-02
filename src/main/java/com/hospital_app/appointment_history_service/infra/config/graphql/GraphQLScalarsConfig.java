@@ -14,8 +14,9 @@ public class GraphQLScalarsConfig {
         return wiringBuilder -> wiringBuilder
                 .scalar(ExtendedScalars.UUID)
                 .scalar(GraphQLScalarType.newScalar(ExtendedScalars.DateTime)
-                        .name("LocalDateTime")   // alias
+                        .name("OffsetDateTime") // optional alias
                         .build());
     }
+
 
 }

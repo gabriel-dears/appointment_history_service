@@ -2,7 +2,7 @@
 # Scalars
 # =====================
 scalar UUID
-scalar LocalDateTime
+scalar OffsetDateTime
 
 # =====================
 # Pagination
@@ -39,11 +39,11 @@ type AppointmentHistoryResponse {
     patientName: String!
     doctorId: UUID!
     doctorName: String!
-    dateTime: LocalDateTime!
+    dateTime: OffsetDateTime!
     status: String!
     notes: String!
     version: Int!
-    receivedAt: LocalDateTime!
+    receivedAt: OffsetDateTime!
 }
 
 # =====================

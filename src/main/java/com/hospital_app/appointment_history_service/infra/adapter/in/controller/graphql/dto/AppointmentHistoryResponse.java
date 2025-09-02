@@ -1,6 +1,9 @@
 package com.hospital_app.appointment_history_service.infra.adapter.in.controller.graphql.dto;
 
-import java.time.LocalDateTime;
+import com.hospital_app.appointment_history_service.domain.model.AppointmentHistory;
+
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 public record AppointmentHistoryResponse(
@@ -11,10 +14,29 @@ public record AppointmentHistoryResponse(
         String patientName,
         UUID doctorId,
         String doctorName,
-        LocalDateTime dateTime,
+        OffsetDateTime dateTime,
         String status,
         String notes,
         Long version,
-        LocalDateTime receivedAt
+        OffsetDateTime receivedAt
 ) {
+
+    public static AppointmentHistoryResponse from(AppointmentHistory appointmentHistory) {
+        return new AppointmentHistoryResponse(
+                appointmentHistory.getId(),
+                appointmentHistory.getAppointmentId(),
+                appointmentHistory.getPatientId(),
+                appointmentHistory.getPatientEmail(),
+                appointmentHistory.getPatientName(),
+                appointmentHistory.getDoctorId(),
+                appointmentHistory.getDoctorName(),
+                appointmentHistory.getDateTime().atOffset(ZoneOffset.UTC),
+                appointmentHistory.getStatus(),
+                appointmentHistory.getNotes(),
+                appointmentHistory.getVersion(),
+                appointmentHistory.getReceivedAt().atOffset(ZoneOffset.UTC)
+        );
+    }
 }
+
+

@@ -12,6 +12,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import java.time.OffsetDateTime;
+
 @Entity
 @Table(name = "appointments_history")
 @Getter
@@ -25,35 +27,44 @@ public class JpaAppointmentHistoryEntity {
 
     @NotNull
     private UUID appointmentId;
+
     @NotNull
     private UUID patientId;
+
     @NotBlank
     @Email
     @Size(max = 100)
     private String patientEmail;
+
     @NotBlank
     @Size(min = 3, max = 255)
     private String patientName;
+
     @NotNull
     private UUID doctorId;
+
     @NotBlank
     private String doctorName;
+
     @NotNull
-    private LocalDateTime dateTime;
+    private OffsetDateTime dateTime;  // changed
+
     @NotBlank
     private String status;
+
     @NotBlank
     private String notes;
+
     @NotNull
     private Long version;
+
     @NotNull
-    private LocalDateTime receivedAt;
+    private OffsetDateTime receivedAt; // changed
 
     @PrePersist
     public void prePersist() {
         if (receivedAt == null) {
-            receivedAt = LocalDateTime.now();
+            receivedAt = OffsetDateTime.now();  // use OffsetDateTime
         }
     }
-
 }
