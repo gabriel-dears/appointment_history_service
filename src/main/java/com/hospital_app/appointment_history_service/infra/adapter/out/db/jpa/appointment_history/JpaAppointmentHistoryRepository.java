@@ -20,9 +20,6 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
 
     Page<JpaAppointmentHistoryEntity> findByAppointmentIdAndDateTimeBeforeOrderByVersionAsc(UUID appointmentId, OffsetDateTime now, Pageable pageable);
 
-    Page<JpaAppointmentHistoryEntity> findByDateTimeAfterOrderByVersionAsc(OffsetDateTime now, Pageable pageable);
-
-    Page<JpaAppointmentHistoryEntity> findByDateTimeBeforeOrderByVersionAsc(OffsetDateTime now, Pageable pageable);
 
     @Query("""
             SELECT h
@@ -66,41 +63,6 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             """)
     Page<JpaAppointmentHistoryEntity> findByLastVersionAppointmentIdAndDateTimeBefore(@Param("appointmentId") UUID appointmentId,
                                                                                       @Param("now") OffsetDateTime now, Pageable pageable);
-
-    @Query("""
-            SELECT h
-                        FROM JpaAppointmentHistoryEntity h
-                          WHERE h.version = (
-                            SELECT MAX(h2.version)
-                            FROM JpaAppointmentHistoryEntity h2
-                            WHERE h2.appointmentId = h.appointmentId
-                          )
-            """)
-    Page<JpaAppointmentHistoryEntity> findAllByLastVersion(Pageable pageable);
-
-    @Query("""
-            SELECT h
-                        FROM JpaAppointmentHistoryEntity h
-                          WHERE h.version = (
-                            SELECT MAX(h2.version)
-                            FROM JpaAppointmentHistoryEntity h2
-                            WHERE h2.appointmentId = h.appointmentId
-                        )
-                        AND h.dateTime > :now
-            """)
-    Page<JpaAppointmentHistoryEntity> findAllByLastVersionFuture(OffsetDateTime now, Pageable pageable);
-
-    @Query("""
-            SELECT h
-                        FROM JpaAppointmentHistoryEntity h
-                          WHERE h.version = (
-                            SELECT MAX(h2.version)
-                            FROM JpaAppointmentHistoryEntity h2
-                            WHERE h2.appointmentId = h.appointmentId
-                        )
-                        AND h.dateTime < :now
-            """)
-    Page<JpaAppointmentHistoryEntity> findAllByLastVersionPast(OffsetDateTime now, Pageable pageable);
 
     @Query("""
                 SELECT a
@@ -174,6 +136,73 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
                 ORDER BY a.dateTime DESC
             """)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesLastVersionPast(
+            @Param("patientId") UUID patientId,
+            @Param("doctorId") UUID doctorId,
+            @Param("patientName") String patientName,
+            @Param("doctorName") String doctorName,
+            @Param("status") String status,
+            @Param("dateTime") OffsetDateTime dateTime,
+            @Param("now") OffsetDateTime now,
+            Pageable pageable
+    );
+
+    @Query("""
+                SELECT a
+                FROM JpaAppointmentHistoryEntity a
+                WHERE (:patientId IS NULL OR a.patientId = :patientId)
+                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
+                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
+                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                AND (:status IS NULL OR a.status = :status)
+                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
+                ORDER BY a.dateTime DESC
+            """)
+    Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesAll(
+            @Param("patientId") UUID patientId,
+            @Param("doctorId") UUID doctorId,
+            @Param("patientName") String patientName,
+            @Param("doctorName") String doctorName,
+            @Param("status") String status,
+            @Param("dateTime") OffsetDateTime dateTime,
+            Pageable pageable
+    );
+
+    @Query("""
+                SELECT a
+                FROM JpaAppointmentHistoryEntity a
+                WHERE (:patientId IS NULL OR a.patientId = :patientId)
+                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
+                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
+                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                AND (:status IS NULL OR a.status = :status)
+                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
+                AND a.dateTime > :now
+                ORDER BY a.dateTime DESC
+            """)
+    Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesFuture(
+            @Param("patientId") UUID patientId,
+            @Param("doctorId") UUID doctorId,
+            @Param("patientName") String patientName,
+            @Param("doctorName") String doctorName,
+            @Param("status") String status,
+            @Param("dateTime") OffsetDateTime dateTime,
+            @Param("now") OffsetDateTime now,
+            Pageable pageable
+    );
+
+    @Query("""
+                SELECT a
+                FROM JpaAppointmentHistoryEntity a
+                WHERE (:patientId IS NULL OR a.patientId = :patientId)
+                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
+                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
+                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                AND (:status IS NULL OR a.status = :status)
+                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
+                AND a.dateTime < :now
+                ORDER BY a.dateTime DESC
+            """)
+    Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesPast(
             @Param("patientId") UUID patientId,
             @Param("doctorId") UUID doctorId,
             @Param("patientName") String patientName,

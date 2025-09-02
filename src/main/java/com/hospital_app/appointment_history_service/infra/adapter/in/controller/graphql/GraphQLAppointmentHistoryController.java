@@ -1,27 +1,26 @@
 package com.hospital_app.appointment_history_service.infra.adapter.in.controller.graphql;
 
 import com.hospital_app.appointment_history_service.application.port.in.appointment_history.AppointmentDateTimeScope;
+import com.hospital_app.appointment_history_service.application.port.in.appointment_history.FindAllAppointmentHistoryUseCase;
 import com.hospital_app.appointment_history_service.application.port.in.appointment_history.FindByIdAppointmentHistoryUseCase;
 import com.hospital_app.appointment_history_service.infra.adapter.in.controller.graphql.dto.AppointmentHistoryConnection;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Controller
 public class GraphQLAppointmentHistoryController {
 
     private final FindByIdAppointmentHistoryUseCase findByIdAppointmentHistoryUseCase;
+    private final FindAllAppointmentHistoryUseCase findAllAppointmentHistoryUseCase;
 
-    public GraphQLAppointmentHistoryController(FindByIdAppointmentHistoryUseCase findByIdAppointmentHistoryUseCase) {
+    public GraphQLAppointmentHistoryController(FindByIdAppointmentHistoryUseCase findByIdAppointmentHistoryUseCase, FindAllAppointmentHistoryUseCase findAllAppointmentHistoryUseCase) {
         this.findByIdAppointmentHistoryUseCase = findByIdAppointmentHistoryUseCase;
+        this.findAllAppointmentHistoryUseCase = findAllAppointmentHistoryUseCase;
     }
-
-    // ========================================
-    // Queries by Appointment ID
-    // ========================================
 
     @QueryMapping
     public AppointmentHistoryConnection pastAppointmentHistoryByAppointmentId(
@@ -50,49 +49,85 @@ public class GraphQLAppointmentHistoryController {
             @Argument int page,
             @Argument int size
     ) {
-        // TODO: sort desc by version -> stream().sort...
         return findByIdAppointmentHistoryUseCase.execute(id, lastVersionOnly, page, size, AppointmentDateTimeScope.ALL);
     }
-
-    // ========================================
-    // Queries for all Appointments (with context)
-    // ========================================
 
     @QueryMapping
     public AppointmentHistoryConnection pastAppointmentHistories(
             @Argument boolean lastVersionOnly,
             @Argument int page,
-            @Argument int size
+            @Argument int size,
+            @Argument UUID patientId,
+            @Argument UUID doctorId,
+            @Argument String patientName,
+            @Argument String doctorName,
+            @Argument String status,
+            @Argument OffsetDateTime dateTime
     ) {
-        // TODO: return similarly to the by ID query, but not filtering by ID
-        // TODO:
-        //      create some filters...
-        //      most recents...
-        //      (order by dateTime desc),
-        //      specific dateTime,
-        //      specific patientId,
-        //      specific doctorId
-        //      LIKE doctor name, patient name??
-        //      specific status
-        return null;
+        return findAllAppointmentHistoryUseCase.execute(
+                lastVersionOnly,
+                page,
+                size,
+                patientId,
+                doctorId,
+                patientName,
+                doctorName,
+                status,
+                dateTime,
+                AppointmentDateTimeScope.PAST
+        );
     }
 
     @QueryMapping
     public AppointmentHistoryConnection futureAppointmentHistories(
             @Argument boolean lastVersionOnly,
             @Argument int page,
-            @Argument int size
+            @Argument int size,
+            @Argument UUID patientId,
+            @Argument UUID doctorId,
+            @Argument String patientName,
+            @Argument String doctorName,
+            @Argument String status,
+            @Argument OffsetDateTime dateTime
     ) {
-        return null;
+        return findAllAppointmentHistoryUseCase.execute(
+                lastVersionOnly,
+                page,
+                size,
+                patientId,
+                doctorId,
+                patientName,
+                doctorName,
+                status,
+                dateTime,
+                AppointmentDateTimeScope.FUTURE
+        );
     }
 
     @QueryMapping
     public AppointmentHistoryConnection allAppointmentHistories(
             @Argument boolean lastVersionOnly,
             @Argument int page,
-            @Argument int size
+            @Argument int size,
+            @Argument UUID patientId,
+            @Argument UUID doctorId,
+            @Argument String patientName,
+            @Argument String doctorName,
+            @Argument String status,
+            @Argument OffsetDateTime dateTime
     ) {
-        return null;
+        return findAllAppointmentHistoryUseCase.execute(
+                lastVersionOnly,
+                page,
+                size,
+                patientId,
+                doctorId,
+                patientName,
+                doctorName,
+                status,
+                dateTime,
+                AppointmentDateTimeScope.ALL
+        );
     }
 
 }

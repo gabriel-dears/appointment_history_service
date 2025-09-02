@@ -4,10 +4,11 @@ import com.hospital_app.appointment_history_service.application.port.out.db.appo
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryEntity;
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Component
 public class FutureAppointmentHistoryQueryPort implements AppointmentHistoryQueryPort {
@@ -19,12 +20,30 @@ public class FutureAppointmentHistoryQueryPort implements AppointmentHistoryQuer
     }
 
     @Override
-    public Page<JpaAppointmentHistoryEntity> findAll(Pageable pageable, boolean lastVersionOnly) {
+    public Page<JpaAppointmentHistoryEntity> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, UUID doctorId, String patientName, String doctorName, String status, OffsetDateTime dateTime) {
 
         if (lastVersionOnly) {
-            return repository.findAllByLastVersionFuture(OffsetDateTime.now(), pageable);
+            return repository.searchAppointmentHistoriesLastVersionFuture(
+                    patientId,
+                    doctorId,
+                    patientName,
+                    doctorName,
+                    status,
+                    dateTime,
+                    OffsetDateTime.now(),
+                    PageRequest.of(page, size)
+            );
         }
 
-        return repository.findByDateTimeAfterOrderByVersionAsc(OffsetDateTime.now(), pageable);
+        return repository.searchAppointmentHistoriesFuture(
+                patientId,
+                doctorId,
+                patientName,
+                doctorName,
+                status,
+                dateTime,
+                OffsetDateTime.now(),
+                PageRequest.of(page, size)
+        );
     }
 }

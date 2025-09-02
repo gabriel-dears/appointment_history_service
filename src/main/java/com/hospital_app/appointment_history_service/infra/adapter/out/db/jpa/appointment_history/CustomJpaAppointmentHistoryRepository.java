@@ -8,10 +8,6 @@ import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.app
 import com.hospital_app.appointment_history_service.infra.mapper.JpaAppointmentHistoryMapper;
 import com.hospital_app.common.db.pagination.ApplicationPage;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
@@ -40,13 +36,11 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
 
     @Override
     public ApplicationPage<AppointmentHistory> findByAppointmentId(UUID appointmentId, boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope appointmentDateTimeScope) {
-
         int validatedPage = Math.max(page, 0);
         int validatedSize = Math.max(size, 1);
-        Pageable pageable = PageRequest.of(validatedPage, validatedSize);
 
         Page<JpaAppointmentHistoryEntity> result = appointmentHistoryByAppointmentIdQueryFactory.getQuery(appointmentDateTimeScope).findByAppointmentId(
-                appointmentId, pageable, lastVersionOnly
+                appointmentId, validatedPage, validatedSize, lastVersionOnly
         );
 
         return new ApplicationPage<>(
@@ -61,28 +55,21 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
     }
 
     @Override
-    public ApplicationPage<AppointmentHistory> findAll(
-            boolean lastVersionOnly,
-            int page,
-            int size,
-            UUID patientId,
-            UUID doctorId,
-            String patientName,
-            String doctorName,
-            String status,
-            OffsetDateTime dateTime
-    ) {
-        Specification<JpaAppointmentHistoryEntity> spec = Specification
-                .<JpaAppointmentHistoryEntity>unrestricted()
-                .and(AppointmentHistorySpecifications.byPatientId(patientId))
-                .and(AppointmentHistorySpecifications.byDoctorId(doctorId))
-                .and(AppointmentHistorySpecifications.byPatientNameLike(patientName))
-                .and(AppointmentHistorySpecifications.byDoctorNameLike(doctorName))
-                .and(AppointmentHistorySpecifications.byStatus(status))
-                .and(AppointmentHistorySpecifications.byDateTime(dateTime));
+    public ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, UUID doctorId, String patientName, String doctorName, String status, OffsetDateTime dateTime, AppointmentDateTimeScope appointmentDateTimeScope) {
+        int validatedPage = Math.max(page, 0);
+        int validatedSize = Math.max(size, 1);
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dateTime"));
-        var result = jpaAppointmentHistoryRepository.findAll(spec, pageable);
+        Page<JpaAppointmentHistoryEntity> result = appointmentHistoryQueryFactory.getQuery(appointmentDateTimeScope).findAll(
+                lastVersionOnly,
+                validatedPage,
+                validatedSize,
+                patientId,
+                doctorId,
+                patientName,
+                doctorName,
+                status,
+                dateTime
+        );
 
         return new ApplicationPage<>(
                 result.getNumber(),
