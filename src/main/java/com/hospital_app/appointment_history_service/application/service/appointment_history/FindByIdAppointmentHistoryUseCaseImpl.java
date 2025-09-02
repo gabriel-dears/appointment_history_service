@@ -19,7 +19,7 @@ public class FindByIdAppointmentHistoryUseCaseImpl implements FindByIdAppointmen
         this.customAppointmentHistoryRepository = customAppointmentHistoryRepository;
     }
 
-    // TODO: check error --> date... verify best information format to return from the application
+    // TODO: validate when token comes with PATIENT role
     @Override
     public AppointmentHistoryConnection execute(UUID id, boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope  appointmentDateTimeScope) {
         ApplicationPage<AppointmentHistory> historyApplicationPage = customAppointmentHistoryRepository.findByAppointmentId(id, lastVersionOnly, page, size, appointmentDateTimeScope);
