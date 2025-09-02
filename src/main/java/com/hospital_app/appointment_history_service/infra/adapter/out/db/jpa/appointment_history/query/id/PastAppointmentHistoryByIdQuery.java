@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -23,7 +22,7 @@ public class PastAppointmentHistoryByIdQuery implements AppointmentHistoryByIdQu
     @Override
     public Page<JpaAppointmentHistoryEntity> findByAppointmentId(UUID appointmentId, Pageable pageable, boolean lastVersionOnly) {
         if (lastVersionOnly) {
-            return repository.findByLastVersionAppointmentIdAndDateTimeBefore(appointmentId, LocalDateTime.now(), pageable);
+            return repository.findByLastVersionAppointmentIdAndDateTimeBefore(appointmentId, OffsetDateTime.now(), pageable);
         } else {
             return repository.findByAppointmentIdAndDateTimeBeforeOrderByVersionAsc(appointmentId, OffsetDateTime.now(), pageable);
         }

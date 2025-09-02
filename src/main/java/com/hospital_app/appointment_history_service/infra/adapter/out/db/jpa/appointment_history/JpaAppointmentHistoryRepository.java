@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -41,7 +40,7 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
                         )
             """)
     Page<JpaAppointmentHistoryEntity> findByLastVersionAppointmentIdFuture(@Param("appointmentId") UUID appointmentId,
-                                                                           @Param("now") LocalDateTime now, Pageable pageable);
+                                                                           @Param("now") OffsetDateTime now, Pageable pageable);
 
     @Query("""
             SELECT h
@@ -55,7 +54,7 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
                         )
             """)
     Page<JpaAppointmentHistoryEntity> findByLastVersionAppointmentIdAndDateTimeBefore(@Param("appointmentId") UUID appointmentId,
-                                                                                      @Param("now") LocalDateTime now, Pageable pageable);
+                                                                                      @Param("now") OffsetDateTime now, Pageable pageable);
 
     Page<JpaAppointmentHistoryEntity> findByAppointmentIdOrderByVersionAsc(UUID appointmentId, Pageable pageable);
 
