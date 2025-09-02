@@ -9,13 +9,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import java.time.OffsetDateTime;
-
 @Entity
-@Table(name = "appointments_history")
+@Table(
+        name = "appointments_history",
+        indexes = {
+                @Index(name = "idx_appointment_id_version", columnList = "appointment_id, version")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor

@@ -18,7 +18,7 @@ public class AllAppointmentHistoryQueryPort implements AppointmentHistoryQueryPo
 
     @Override
     public Page<JpaAppointmentHistoryEntity> findAll(Pageable pageable, boolean lastVersionOnly) {
-        if(lastVersionOnly) {
+        if (lastVersionOnly) {
             return repository.findAllByLastVersion(pageable);
         }
 

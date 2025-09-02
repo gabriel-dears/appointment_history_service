@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -24,7 +23,7 @@ public class AllAppointmentHistoryByIdQuery implements AppointmentHistoryByIdQue
         if (lastVersionOnly) {
             return repository.findByLastVersionAppointmentId(appointmentId, pageable);
         } else {
-            return repository.findByAppointmentId(appointmentId, pageable);
+            return repository.findByAppointmentIdOrderByVersionAsc(appointmentId, pageable);
         }
     }
 }

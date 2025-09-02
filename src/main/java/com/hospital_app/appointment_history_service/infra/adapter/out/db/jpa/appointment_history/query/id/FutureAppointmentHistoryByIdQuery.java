@@ -25,7 +25,7 @@ public class FutureAppointmentHistoryByIdQuery implements AppointmentHistoryById
         if (lastVersionOnly) {
             return repository.findByLastVersionAppointmentIdFuture(appointmentId, LocalDateTime.now(), pageable);
         } else {
-            return repository.findByAppointmentIdAndDateTimeAfter(appointmentId, OffsetDateTime.now(), pageable);
+            return repository.findByAppointmentIdAndDateTimeAfterOrderByVersionAsc(appointmentId, OffsetDateTime.now(), pageable);
         }
     }
 }

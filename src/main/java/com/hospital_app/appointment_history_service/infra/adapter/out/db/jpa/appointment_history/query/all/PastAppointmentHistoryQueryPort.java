@@ -25,6 +25,6 @@ public class PastAppointmentHistoryQueryPort implements AppointmentHistoryQueryP
             return repository.findAllByLastVersionPast(OffsetDateTime.now(), pageable);
         }
 
-        return repository.findByDateTimeBefore(OffsetDateTime.now(), pageable);
+        return repository.findByDateTimeBeforeOrderByVersionAsc(OffsetDateTime.now(), pageable);
     }
 }

@@ -57,11 +57,11 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
     Page<JpaAppointmentHistoryEntity> findByLastVersionAppointmentIdAndDateTimeBefore(@Param("appointmentId") UUID appointmentId,
                                                                                       @Param("now") LocalDateTime now, Pageable pageable);
 
-    Page<JpaAppointmentHistoryEntity> findByAppointmentId(UUID appointmentId, Pageable pageable);
+    Page<JpaAppointmentHistoryEntity> findByAppointmentIdOrderByVersionAsc(UUID appointmentId, Pageable pageable);
 
-    Page<JpaAppointmentHistoryEntity> findByAppointmentIdAndDateTimeAfter(UUID appointmentId, OffsetDateTime now, Pageable pageable);
+    Page<JpaAppointmentHistoryEntity> findByAppointmentIdAndDateTimeAfterOrderByVersionAsc(UUID appointmentId, OffsetDateTime now, Pageable pageable);
 
-    Page<JpaAppointmentHistoryEntity> findByAppointmentIdAndDateTimeBefore(UUID appointmentId, OffsetDateTime now, Pageable pageable);
+    Page<JpaAppointmentHistoryEntity> findByAppointmentIdAndDateTimeBeforeOrderByVersionAsc(UUID appointmentId, OffsetDateTime now, Pageable pageable);
 
     @Query("""
             SELECT h
@@ -98,8 +98,8 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             """)
     Page<JpaAppointmentHistoryEntity> findAllByLastVersionPast(OffsetDateTime now, Pageable pageable);
 
-    Page<JpaAppointmentHistoryEntity> findByDateTimeAfter(OffsetDateTime now, Pageable pageable);
+    Page<JpaAppointmentHistoryEntity> findByDateTimeAfterOrderByVersionAsc(OffsetDateTime now, Pageable pageable);
 
-    Page<JpaAppointmentHistoryEntity> findByDateTimeBefore(OffsetDateTime now, Pageable pageable);
+    Page<JpaAppointmentHistoryEntity> findByDateTimeBeforeOrderByVersionAsc(OffsetDateTime now, Pageable pageable);
 
 }
