@@ -1,6 +1,7 @@
 package com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.query.all;
 
 import com.hospital_app.appointment_history_service.application.port.out.db.appointment_history.AppointmentHistoryQueryPort;
+import com.hospital_app.appointment_history_service.application.port.out.db.appointment_history.CustomAppointmentHistoryRepository;
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryEntity;
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryRepository;
 import org.springframework.data.domain.Page;
@@ -10,10 +11,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class AllAppointmentHistoryQueryPort implements AppointmentHistoryQueryPort {
 
-    private final JpaAppointmentHistoryRepository repository;
+    // TODO: create functions using new Specifications... dateTimeAfter and dateTimeBefore
 
-    public AllAppointmentHistoryQueryPort(JpaAppointmentHistoryRepository repository) {
+    private final JpaAppointmentHistoryRepository repository;
+    private final CustomAppointmentHistoryRepository customAppointmentHistoryRepository;
+
+    public AllAppointmentHistoryQueryPort(JpaAppointmentHistoryRepository repository, CustomAppointmentHistoryRepository customAppointmentHistoryRepository) {
         this.repository = repository;
+        this.customAppointmentHistoryRepository = customAppointmentHistoryRepository;
     }
 
     @Override

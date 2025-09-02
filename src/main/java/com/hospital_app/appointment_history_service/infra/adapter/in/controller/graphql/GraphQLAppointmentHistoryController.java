@@ -3,13 +3,11 @@ package com.hospital_app.appointment_history_service.infra.adapter.in.controller
 import com.hospital_app.appointment_history_service.application.port.in.appointment_history.AppointmentDateTimeScope;
 import com.hospital_app.appointment_history_service.application.port.in.appointment_history.FindByIdAppointmentHistoryUseCase;
 import com.hospital_app.appointment_history_service.infra.adapter.in.controller.graphql.dto.AppointmentHistoryConnection;
-import com.hospital_app.appointment_history_service.infra.adapter.in.controller.graphql.dto.AppointmentHistoryWithContext;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -61,30 +59,40 @@ public class GraphQLAppointmentHistoryController {
     // ========================================
 
     @QueryMapping
-    public List<AppointmentHistoryWithContext> pastAppointmentHistories(
+    public AppointmentHistoryConnection pastAppointmentHistories(
             @Argument boolean lastVersionOnly,
             @Argument int page,
             @Argument int size
     ) {
-        return new ArrayList<>();
+        // TODO: return similarly to the by ID query, but not filtering by ID
+        // TODO:
+        //      create some filters...
+        //      most recents...
+        //      (order by dateTime desc),
+        //      specific dateTime,
+        //      specific patientId,
+        //      specific doctorId
+        //      LIKE doctor name, patient name??
+        //      specific status
+        return null;
     }
 
     @QueryMapping
-    public List<AppointmentHistoryWithContext> futureAppointmentHistories(
+    public AppointmentHistoryConnection futureAppointmentHistories(
             @Argument boolean lastVersionOnly,
             @Argument int page,
             @Argument int size
     ) {
-        return new ArrayList<>();
+        return null;
     }
 
     @QueryMapping
-    public List<AppointmentHistoryWithContext> allAppointmentHistories(
+    public AppointmentHistoryConnection allAppointmentHistories(
             @Argument boolean lastVersionOnly,
             @Argument int page,
             @Argument int size
     ) {
-        return new ArrayList<>();
+        return null;
     }
 
 }

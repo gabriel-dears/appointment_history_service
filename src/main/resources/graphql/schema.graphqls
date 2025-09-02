@@ -22,12 +22,6 @@ type AppointmentHistoryConnection {
     content: [AppointmentHistoryResponse!]!
 }
 
-# Wrapper if you want to include extra metadata, e.g. appointmentId
-type AppointmentHistoryWithContext {
-    appointmentId: UUID!
-    history: AppointmentHistoryConnection!
-}
-
 # =====================
 # Domain Types
 # =====================
@@ -74,18 +68,37 @@ type Query {
     pastAppointmentHistories(
         lastVersionOnly: Boolean = true,
         page: Int = 0,
-        size: Int = 10
-    ): [AppointmentHistoryWithContext!]!
+        size: Int = 10,
+        patientId: UUID,
+        doctorId: UUID,
+        patientName: String,
+        doctorName: String,
+        status: String,
+        dateTime: OffsetDateTime
+    ): AppointmentHistoryConnection!
 
     futureAppointmentHistories(
         lastVersionOnly: Boolean = true,
         page: Int = 0,
-        size: Int = 10
-    ): [AppointmentHistoryWithContext!]!
+        size: Int = 10,
+        patientId: UUID,
+        doctorId: UUID,
+        patientName: String,
+        doctorName: String,
+        status: String,
+        dateTime: OffsetDateTime
+    ): AppointmentHistoryConnection!
 
     allAppointmentHistories(
         lastVersionOnly: Boolean = true,
         page: Int = 0,
-        size: Int = 10
-    ): [AppointmentHistoryWithContext!]!
+        size: Int = 10,
+        patientId: UUID,
+        doctorId: UUID,
+        patientName: String,
+        doctorName: String,
+        status: String,
+        dateTime: OffsetDateTime
+    ): AppointmentHistoryConnection!
+
 }
