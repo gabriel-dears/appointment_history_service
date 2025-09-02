@@ -38,7 +38,9 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
     @Override
     public ApplicationPage<AppointmentHistory> findByAppointmentId(UUID appointmentId, boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope appointmentDateTimeScope) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        int validatedPage = Math.max(page, 0);
+        int validatedSize = Math.max(size, 1);
+        Pageable pageable = PageRequest.of(validatedPage, validatedSize);
 
         Page<JpaAppointmentHistoryEntity> result = appointmentHistoryByAppointmentIdQueryFactory.getQuery(appointmentDateTimeScope).findByAppointmentId(
                 appointmentId, pageable, lastVersionOnly
@@ -58,7 +60,9 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
     @Override
     public ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope appointmentDateTimeScope) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        int validatedPage = Math.max(page, 0);
+        int validatedSize = Math.max(size, 1);
+        Pageable pageable = PageRequest.of(validatedPage, validatedSize);
 
         Page<JpaAppointmentHistoryEntity> result = appointmentHistoryQueryFactory.getQuery(appointmentDateTimeScope).findAll(
                 pageable, lastVersionOnly
