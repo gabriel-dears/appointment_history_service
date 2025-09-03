@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -64,22 +65,22 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
     Page<JpaAppointmentHistoryEntity> findByLastVersionAppointmentIdAndDateTimeBefore(@Param("appointmentId") UUID appointmentId,
                                                                                       @Param("now") OffsetDateTime now, Pageable pageable);
 
-    @Query("""
-                SELECT a
-                FROM JpaAppointmentHistoryEntity a
+    @Query(value = """
+                SELECT *
+                FROM appointments_history a
                 WHERE a.version = (
                     SELECT MAX(a2.version)
-                    FROM JpaAppointmentHistoryEntity a2
-                    WHERE a2.appointmentId = a.appointmentId
+                    FROM appointments_history a2
+                    WHERE a2.appointment_Id = a.appointment_Id
                 )
-                AND (:patientId IS NULL OR a.patientId = :patientId)
-                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
-                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
-                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
-                AND (:status IS NULL OR a.status = :status)
-                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
-                ORDER BY a.dateTime DESC
-            """)
+                  AND (:patientId IS NULL OR a.patient_Id = :patientId)
+                  AND (:doctorId IS NULL OR a.doctor_Id = :doctorId)
+                  AND (:patientName IS NULL OR LOWER(a.patient_Name) LIKE LOWER(CONCAT('%', :patientName, '%')))
+                  AND (:doctorName IS NULL OR LOWER(a.doctor_Name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                  AND (:status IS NULL OR a.status = :status)
+                  AND (:dateTime IS NULL OR a.date_Time = CAST(:dateTime AS timestamp with time zone))
+                ORDER BY a.date_time DESC
+            """, nativeQuery = true)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesLastVersionAll(
             @Param("patientId") UUID patientId,
             @Param("doctorId") UUID doctorId,
@@ -90,23 +91,23 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             Pageable pageable
     );
 
-    @Query("""
-                SELECT a
-                FROM JpaAppointmentHistoryEntity a
+    @Query(value = """
+                SELECT *
+                FROM appointments_history a
                 WHERE a.version = (
                     SELECT MAX(a2.version)
-                    FROM JpaAppointmentHistoryEntity a2
-                    WHERE a2.appointmentId = a.appointmentId
+                    FROM appointments_history a2
+                    WHERE a2.appointment_Id = a.appointment_Id
                 )
-                AND (:patientId IS NULL OR a.patientId = :patientId)
-                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
-                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
-                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
-                AND (:status IS NULL OR a.status = :status)
-                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
-                AND a.dateTime > :now
-                ORDER BY a.dateTime DESC
-            """)
+                  AND (:patientId IS NULL OR a.patient_Id = :patientId)
+                  AND (:doctorId IS NULL OR a.doctor_Id = :doctorId)
+                  AND (:patientName IS NULL OR LOWER(a.patient_Name) LIKE LOWER(CONCAT('%', :patientName, '%')))
+                  AND (:doctorName IS NULL OR LOWER(a.doctor_Name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                  AND (:status IS NULL OR a.status = :status)
+                  AND (:dateTime IS NULL OR a.date_Time = CAST(:dateTime AS timestamp with time zone))
+                  AND date_time > :now
+                ORDER BY a.date_time DESC
+            """, nativeQuery = true)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesLastVersionFuture(
             @Param("patientId") UUID patientId,
             @Param("doctorId") UUID doctorId,
@@ -118,23 +119,23 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             Pageable pageable
     );
 
-    @Query("""
-                SELECT a
-                FROM JpaAppointmentHistoryEntity a
+    @Query(value = """
+                SELECT *
+                FROM appointments_history a
                 WHERE a.version = (
                     SELECT MAX(a2.version)
-                    FROM JpaAppointmentHistoryEntity a2
-                    WHERE a2.appointmentId = a.appointmentId
+                    FROM appointments_history a2
+                    WHERE a2.appointment_Id = a.appointment_Id
                 )
-                AND (:patientId IS NULL OR a.patientId = :patientId)
-                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
-                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
-                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
-                AND (:status IS NULL OR a.status = :status)
-                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
-                AND a.dateTime < :now
-                ORDER BY a.dateTime DESC
-            """)
+                  AND (:patientId IS NULL OR a.patient_Id = :patientId)
+                  AND (:doctorId IS NULL OR a.doctor_Id = :doctorId)
+                  AND (:patientName IS NULL OR LOWER(a.patient_Name) LIKE LOWER(CONCAT('%', :patientName, '%')))
+                  AND (:doctorName IS NULL OR LOWER(a.doctor_Name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                  AND (:status IS NULL OR a.status = :status)
+                  AND (:dateTime IS NULL OR a.date_Time = CAST(:dateTime AS timestamp with time zone))
+                  AND date_time < :now
+                ORDER BY a.date_time DESC
+            """, nativeQuery = true)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesLastVersionPast(
             @Param("patientId") UUID patientId,
             @Param("doctorId") UUID doctorId,
@@ -146,39 +147,41 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             Pageable pageable
     );
 
-    @Query("""
-                SELECT a
-                FROM JpaAppointmentHistoryEntity a
-                WHERE (:patientId IS NULL OR a.patientId = :patientId)
-                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
-                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
-                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
-                AND (:status IS NULL OR a.status = :status)
-                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
-                ORDER BY a.dateTime DESC
-            """)
+    // TODO: fix all other operations to nativeQuery syntax
+    @Query(value = """
+            SELECT *
+            FROM appointments_history a
+            WHERE (:patientId IS NULL OR a.patient_id = :patientId)
+              AND (:doctorId IS NULL OR a.doctor_id = :doctorId)
+              AND (:patientName IS NULL OR LOWER(a.patient_name) LIKE LOWER(CONCAT('%', :patientName, '%')))
+              AND (:doctorName IS NULL OR LOWER(a.doctor_name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+              AND (:status IS NULL OR a.status = :status)
+            ORDER BY a.date_time DESC
+            """,
+            nativeQuery = true
+    )
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesAll(
             @Param("patientId") UUID patientId,
             @Param("doctorId") UUID doctorId,
             @Param("patientName") String patientName,
             @Param("doctorName") String doctorName,
             @Param("status") String status,
-            @Param("dateTime") OffsetDateTime dateTime,
             Pageable pageable
     );
 
-    @Query("""
-                SELECT a
-                FROM JpaAppointmentHistoryEntity a
-                WHERE (:patientId IS NULL OR a.patientId = :patientId)
-                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
-                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
-                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
-                AND (:status IS NULL OR a.status = :status)
-                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
-                AND a.dateTime > :now
-                ORDER BY a.dateTime DESC
-            """)
+
+    @Query(value = """
+            SELECT *
+                FROM appointments_history a
+                WHERE (:patientId IS NULL OR a.patient_Id = :patientId)
+                  AND (:doctorId IS NULL OR a.doctor_Id = :doctorId)
+                  AND (:patientName IS NULL OR LOWER(a.patient_Name) LIKE LOWER(CONCAT('%', :patientName, '%')))
+                  AND (:doctorName IS NULL OR LOWER(a.doctor_Name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                  AND (:status IS NULL OR a.status = :status)
+                  AND (:dateTime IS NULL OR a.date_Time = CAST(:dateTime AS timestamp with time zone))
+                  AND date_time > :now
+                ORDER BY a.date_time DESC;
+            """, nativeQuery = true)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesFuture(
             @Param("patientId") UUID patientId,
             @Param("doctorId") UUID doctorId,
@@ -190,18 +193,18 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             Pageable pageable
     );
 
-    @Query("""
-                SELECT a
-                FROM JpaAppointmentHistoryEntity a
-                WHERE (:patientId IS NULL OR a.patientId = :patientId)
-                AND (:doctorId IS NULL OR a.doctorId = :doctorId)
-                AND (:patientName IS NULL OR LOWER(a.patientName) LIKE LOWER(CONCAT('%', :patientName, '%')))
-                AND (:doctorName IS NULL OR LOWER(a.doctorName) LIKE LOWER(CONCAT('%', :doctorName, '%')))
-                AND (:status IS NULL OR a.status = :status)
-                AND (:dateTime IS NULL OR a.dateTime = :dateTime)
-                AND a.dateTime < :now
-                ORDER BY a.dateTime DESC
-            """)
+    @Query(value = """
+                SELECT *
+                FROM appointments_history a
+                WHERE (:patientId IS NULL OR a.patient_Id = :patientId)
+                  AND (:doctorId IS NULL OR a.doctor_Id = :doctorId)
+                  AND (:patientName IS NULL OR LOWER(a.patient_Name) LIKE LOWER(CONCAT('%', :patientName, '%')))
+                  AND (:doctorName IS NULL OR LOWER(a.doctor_Name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                  AND (:status IS NULL OR a.status = :status)
+                  AND (:dateTime IS NULL OR a.date_Time = CAST(:dateTime AS timestamp with time zone))
+                  AND date_time < :now
+                ORDER BY a.date_time DESC;
+            """, nativeQuery = true)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesPast(
             @Param("patientId") UUID patientId,
             @Param("doctorId") UUID doctorId,
