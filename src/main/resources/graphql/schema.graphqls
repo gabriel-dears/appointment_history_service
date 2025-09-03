@@ -2,7 +2,6 @@
 # Scalars
 # =====================
 scalar UUID
-scalar OffsetDateTime
 
 # =====================
 # Pagination
@@ -33,11 +32,9 @@ type AppointmentHistoryResponse {
     patientName: String!
     doctorId: UUID!
     doctorName: String!
-    dateTime: OffsetDateTime!
     status: String!
     notes: String!
     version: Int!
-    receivedAt: OffsetDateTime!
 }
 
 # =====================
@@ -72,7 +69,6 @@ type Query {
         patientName: String,
         doctorName: String,
         status: String,
-        dateTime: OffsetDateTime
     ): AppointmentHistoryConnection!
 
     futureAppointmentHistories(
@@ -82,7 +78,6 @@ type Query {
         patientName: String,
         doctorName: String,
         status: String,
-        dateTime: OffsetDateTime
     ): AppointmentHistoryConnection!
 
     allAppointmentHistories(
@@ -92,7 +87,6 @@ type Query {
         patientName: String,
         doctorName: String,
         status: String,
-        dateTime: OffsetDateTime
     ): AppointmentHistoryConnection!
 
 }
