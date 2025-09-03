@@ -23,10 +23,6 @@ public class AppointmentNotificationQueueConsumerImpl {
     public void consume(AppointmentMessage appointmentMessage) {
         AppointmentHistory history = messageAppointmentHistoryMapper.toHistory(appointmentMessage);
         createAppointmentHistoryUseCase.createAppointmentHistory(history);
-        // TODO: expose simple graphql interaction
-        // TODO: create past appointments interaction
-        // TODO: create future appointments interaction
-        // TODO: create all appointments interaction
-
     }
+
 }

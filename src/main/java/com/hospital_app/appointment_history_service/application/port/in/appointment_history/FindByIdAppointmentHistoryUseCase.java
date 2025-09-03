@@ -9,5 +9,6 @@ public interface FindByIdAppointmentHistoryUseCase {
                                          boolean lastVersionOnly,
                                          int page,
                                          int size,
+                                         UUID patientId,
                                          AppointmentDateTimeScope appointmentDateTimeScope);
 }

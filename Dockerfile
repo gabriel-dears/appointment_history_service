@@ -9,6 +9,10 @@ WORKDIR /app
 COPY common /app/common
 RUN mvn -f /app/common/pom.xml clean install -DskipTests
 
+# Copy jwt_security_common first
+COPY jwt_security_common /app/jwt_security_common
+RUN mvn -f /app/jwt_security_common/pom.xml clean install -DskipTests
+
 # Copy appointment_history_service pom and fetch dependencies
 COPY appointment_history_service/pom.xml /app/appointment_history_service/pom.xml
 RUN mvn -f /app/appointment_history_service/pom.xml dependency:go-offline -B

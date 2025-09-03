@@ -10,7 +10,6 @@ import com.hospital_app.common.db.pagination.ApplicationPage;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Repository
@@ -35,12 +34,12 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
     }
 
     @Override
-    public ApplicationPage<AppointmentHistory> findByAppointmentId(UUID appointmentId, boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope appointmentDateTimeScope) {
+    public ApplicationPage<AppointmentHistory> findByAppointmentId(UUID appointmentId, boolean lastVersionOnly, int page, int size, UUID patientId, AppointmentDateTimeScope appointmentDateTimeScope) {
         int validatedPage = Math.max(page, 0);
         int validatedSize = Math.max(size, 1);
 
         Page<JpaAppointmentHistoryEntity> result = appointmentHistoryByAppointmentIdQueryFactory.getQuery(appointmentDateTimeScope).findByAppointmentId(
-                appointmentId, validatedPage, validatedSize, lastVersionOnly
+                appointmentId, validatedPage, validatedSize, patientId, lastVersionOnly
         );
 
         return new ApplicationPage<>(
@@ -55,7 +54,7 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
     }
 
     @Override
-    public ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, String patientName, String doctorName, String status, OffsetDateTime dateTime, AppointmentDateTimeScope appointmentDateTimeScope) {
+    public ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, String patientName, String doctorName, String status, AppointmentDateTimeScope appointmentDateTimeScope) {
         int validatedPage = Math.max(page, 0);
         int validatedSize = Math.max(size, 1);
 
@@ -63,10 +62,10 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
                 lastVersionOnly,
                 validatedPage,
                 validatedSize,
+                patientId,
                 patientName,
                 doctorName,
-                status,
-                dateTime
+                status
         );
 
         return new ApplicationPage<>(

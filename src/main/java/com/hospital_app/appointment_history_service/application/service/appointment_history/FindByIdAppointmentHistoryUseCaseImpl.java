@@ -20,9 +20,12 @@ public class FindByIdAppointmentHistoryUseCaseImpl implements FindByIdAppointmen
     }
 
     // TODO: validate when token comes with PATIENT role
+    //  - add jwt common module (pom.xml and Dockerfile),
+    //  create config and
+    //  protect routes and if patient role, filter by patientId
     @Override
-    public AppointmentHistoryConnection execute(UUID id, boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope  appointmentDateTimeScope) {
-        ApplicationPage<AppointmentHistory> historyApplicationPage = customAppointmentHistoryRepository.findByAppointmentId(id, lastVersionOnly, page, size, appointmentDateTimeScope);
+    public AppointmentHistoryConnection execute(UUID id, boolean lastVersionOnly, int page, int size, UUID patientId, AppointmentDateTimeScope appointmentDateTimeScope) {
+        ApplicationPage<AppointmentHistory> historyApplicationPage = customAppointmentHistoryRepository.findByAppointmentId(id, lastVersionOnly, page, size, patientId, appointmentDateTimeScope);
         return new AppointmentHistoryConnection(
                 PageInfo.from(historyApplicationPage),
                 historyApplicationPage.getContent().stream().map(AppointmentHistoryResponse::from).toList()

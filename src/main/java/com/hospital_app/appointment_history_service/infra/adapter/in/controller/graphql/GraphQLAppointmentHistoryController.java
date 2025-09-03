@@ -6,9 +6,10 @@ import com.hospital_app.appointment_history_service.application.port.in.appointm
 import com.hospital_app.appointment_history_service.infra.adapter.in.controller.graphql.dto.AppointmentHistoryConnection;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Controller
@@ -27,9 +28,11 @@ public class GraphQLAppointmentHistoryController {
             @Argument UUID id,
             @Argument boolean lastVersionOnly,
             @Argument int page,
-            @Argument int size
+            @Argument int size,
+            Authentication authentication
     ) {
-        return findByIdAppointmentHistoryUseCase.execute(id, lastVersionOnly, page, size, AppointmentDateTimeScope.PAST);
+        UUID patientId = getPatientId(authentication);
+        return findByIdAppointmentHistoryUseCase.execute(id, lastVersionOnly, page, size, patientId, AppointmentDateTimeScope.PAST);
     }
 
     @QueryMapping
@@ -37,9 +40,11 @@ public class GraphQLAppointmentHistoryController {
             @Argument UUID id,
             @Argument boolean lastVersionOnly,
             @Argument int page,
-            @Argument int size
+            @Argument int size,
+            Authentication authentication
     ) {
-        return findByIdAppointmentHistoryUseCase.execute(id, lastVersionOnly, page, size, AppointmentDateTimeScope.FUTURE);
+        UUID patientId = getPatientId(authentication);
+        return findByIdAppointmentHistoryUseCase.execute(id, lastVersionOnly, page, size, patientId, AppointmentDateTimeScope.FUTURE);
     }
 
     @QueryMapping
@@ -47,9 +52,11 @@ public class GraphQLAppointmentHistoryController {
             @Argument UUID id,
             @Argument boolean lastVersionOnly,
             @Argument int page,
-            @Argument int size
+            @Argument int size,
+            Authentication authentication
     ) {
-        return findByIdAppointmentHistoryUseCase.execute(id, lastVersionOnly, page, size, AppointmentDateTimeScope.ALL);
+        UUID patientId = getPatientId(authentication);
+        return findByIdAppointmentHistoryUseCase.execute(id, lastVersionOnly, page, size, patientId, AppointmentDateTimeScope.ALL);
     }
 
     @QueryMapping
@@ -60,16 +67,17 @@ public class GraphQLAppointmentHistoryController {
             @Argument String patientName,
             @Argument String doctorName,
             @Argument String status,
-            @Argument OffsetDateTime dateTime
+            Authentication authentication
     ) {
+        UUID patientId = getPatientId(authentication);
         return findAllAppointmentHistoryUseCase.execute(
                 lastVersionOnly,
                 page,
                 size,
+                patientId,
                 patientName,
                 doctorName,
                 status,
-                dateTime,
                 AppointmentDateTimeScope.PAST
         );
     }
@@ -82,16 +90,17 @@ public class GraphQLAppointmentHistoryController {
             @Argument String patientName,
             @Argument String doctorName,
             @Argument String status,
-            @Argument OffsetDateTime dateTime
+            Authentication authentication
     ) {
+        UUID patientId = getPatientId(authentication);
         return findAllAppointmentHistoryUseCase.execute(
                 lastVersionOnly,
                 page,
                 size,
+                patientId,
                 patientName,
                 doctorName,
                 status,
-                dateTime,
                 AppointmentDateTimeScope.FUTURE
         );
     }
@@ -104,18 +113,28 @@ public class GraphQLAppointmentHistoryController {
             @Argument String patientName,
             @Argument String doctorName,
             @Argument String status,
-            @Argument OffsetDateTime dateTime
+            Authentication authentication
     ) {
+        UUID patientId = getPatientId(authentication);
         return findAllAppointmentHistoryUseCase.execute(
                 lastVersionOnly,
                 page,
                 size,
+                patientId,
                 patientName,
                 doctorName,
                 status,
-                dateTime,
                 AppointmentDateTimeScope.ALL
         );
+    }
+
+    public UUID getPatientId(Authentication authentication) {
+        var x = (Jwt) authentication.getPrincipal();
+        String role = (String) x.getClaims().get("role");
+        if ("PATIENT".equals(role)) {
+            return UUID.fromString((String) x.getClaims().get("user_id"));
+        }
+        return null;
     }
 
 }

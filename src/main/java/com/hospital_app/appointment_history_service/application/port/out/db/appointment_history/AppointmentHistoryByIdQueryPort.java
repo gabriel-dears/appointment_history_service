@@ -6,5 +6,5 @@ import org.springframework.data.domain.Page;
 import java.util.UUID;
 
 public interface AppointmentHistoryByIdQueryPort {
-    Page<JpaAppointmentHistoryEntity> findByAppointmentId(UUID appointmentId, int page, int size, boolean lastVersionOnly);
+    Page<JpaAppointmentHistoryEntity> findByAppointmentId(UUID appointmentId, int page, int size, UUID patientId, boolean lastVersionOnly);
 }

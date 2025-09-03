@@ -21,12 +21,12 @@ public class FutureAppointmentHistoryByIdQuery implements AppointmentHistoryById
     }
 
     @Override
-    public Page<JpaAppointmentHistoryEntity> findByAppointmentId(UUID appointmentId, int page, int size, boolean lastVersionOnly) {
+    public Page<JpaAppointmentHistoryEntity> findByAppointmentId(UUID appointmentId, int page, int size, UUID patientId, boolean lastVersionOnly) {
         Pageable pageable = PageRequest.of(page, size);
         if (lastVersionOnly) {
-            return repository.findByLastVersionAppointmentIdFuture(appointmentId, OffsetDateTime.now(), pageable);
+            return repository.findByLastVersionAppointmentIdFuture(patientId, appointmentId, OffsetDateTime.now(), pageable);
         } else {
-            return repository.findByAppointmentIdAndDateTimeAfterOrderByVersionAsc(appointmentId, OffsetDateTime.now(), pageable);
+            return repository.findByPatientIdAndAppointmentIdAndDateTimeAfterOrderByVersionAsc(patientId, appointmentId, OffsetDateTime.now(), pageable);
         }
     }
 }

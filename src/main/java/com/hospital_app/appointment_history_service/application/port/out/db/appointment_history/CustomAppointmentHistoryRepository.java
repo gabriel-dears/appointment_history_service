@@ -4,23 +4,21 @@ import com.hospital_app.appointment_history_service.application.port.in.appointm
 import com.hospital_app.appointment_history_service.domain.model.AppointmentHistory;
 import com.hospital_app.common.db.pagination.ApplicationPage;
 
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public interface CustomAppointmentHistoryRepository {
 
     AppointmentHistory create(AppointmentHistory appointmentHistory);
 
-    ApplicationPage<AppointmentHistory> findByAppointmentId(UUID appointmentId, boolean lastVersionOnly, int page, int size, AppointmentDateTimeScope appointmentDateTimeScope);
+    ApplicationPage<AppointmentHistory> findByAppointmentId(UUID appointmentId, boolean lastVersionOnly, int page, int size, UUID patientId, AppointmentDateTimeScope appointmentDateTimeScope);
 
     ApplicationPage<AppointmentHistory> findAll(
             boolean lastVersionOnly,
             int page,
             int size,
-            String patientName,
+            UUID patientId, String patientName,
             String doctorName,
             String status,
-            OffsetDateTime dateTime,
             AppointmentDateTimeScope appointmentDateTimeScope
     );
 
