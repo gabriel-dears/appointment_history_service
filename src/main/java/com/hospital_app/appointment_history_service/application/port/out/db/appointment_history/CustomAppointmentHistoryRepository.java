@@ -17,8 +17,6 @@ public interface CustomAppointmentHistoryRepository {
             boolean lastVersionOnly,
             int page,
             int size,
-            UUID patientId,
-            UUID doctorId,
             String patientName,
             String doctorName,
             String status,

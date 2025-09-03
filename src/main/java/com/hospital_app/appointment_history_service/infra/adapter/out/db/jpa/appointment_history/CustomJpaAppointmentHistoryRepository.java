@@ -55,7 +55,7 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
     }
 
     @Override
-    public ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, UUID doctorId, String patientName, String doctorName, String status, OffsetDateTime dateTime, AppointmentDateTimeScope appointmentDateTimeScope) {
+    public ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, String patientName, String doctorName, String status, OffsetDateTime dateTime, AppointmentDateTimeScope appointmentDateTimeScope) {
         int validatedPage = Math.max(page, 0);
         int validatedSize = Math.max(size, 1);
 
@@ -63,8 +63,6 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
                 lastVersionOnly,
                 validatedPage,
                 validatedSize,
-                patientId,
-                doctorId,
                 patientName,
                 doctorName,
                 status,

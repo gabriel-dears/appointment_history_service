@@ -4,7 +4,6 @@ import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.app
 import org.springframework.data.domain.Page;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 public interface AppointmentHistoryQueryPort {
 
@@ -14,8 +13,6 @@ public interface AppointmentHistoryQueryPort {
             boolean lastVersionOnly,
             int page,
             int size,
-            UUID patientId,
-            UUID doctorId,
             String patientName,
             String doctorName,
             String status,
