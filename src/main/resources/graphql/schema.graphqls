@@ -3,6 +3,7 @@
 # =====================
 scalar UUID
 scalar OffsetDateTime
+scalar Date
 
 # =====================
 # Pagination
@@ -71,6 +72,9 @@ type Query {
         patientName: String,
         doctorName: String,
         status: String,
+        startDate: Date!,
+        endDate: Date!,
+        patientEmail: String
     ): AppointmentHistoryConnection!
 
     futureAppointmentHistories(
@@ -80,6 +84,9 @@ type Query {
         patientName: String,
         doctorName: String,
         status: String,
+        startDate: Date!,
+        endDate: Date!,
+        patientEmail: String
     ): AppointmentHistoryConnection!
 
     allAppointmentHistories(
@@ -89,6 +96,9 @@ type Query {
         patientName: String,
         doctorName: String,
         status: String,
+        startDate: Date!,
+        endDate: Date!,
+        patientEmail: String
     ): AppointmentHistoryConnection!
 
 }

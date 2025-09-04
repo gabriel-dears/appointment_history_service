@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -98,14 +99,18 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
                 )
                   AND (:patientName IS NULL OR LOWER(a.patient_Name) LIKE LOWER(CONCAT('%', :patientName, '%')))
                   AND (:doctorName IS NULL OR LOWER(a.doctor_Name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                  AND (:patientEmail IS NULL OR LOWER(a.patient_email) LIKE LOWER(CONCAT('%', :patientEmail, '%')))
                   AND (:patientId IS NULL or a.patient_id = :patientId)
                   AND (:status IS NULL OR a.status = :status)
+                  AND (a.date_time::date >= :startDate AND a.date_time::date <= :endDate)
+                ORDER BY a.date_time desc
             """, nativeQuery = true)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesLastVersionAll(
             @Param("patientId") UUID patientId, @Param("patientName") String patientName,
             @Param("doctorName") String doctorName,
             @Param("status") String status,
-            Pageable pageable
+            LocalDate startDate, @Param("endDate") LocalDate endDate,
+            String patientEmail, Pageable pageable
     );
 
     @Query(value = """
@@ -118,16 +123,19 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
                 )
                   AND (:patientName IS NULL OR LOWER(a.patient_Name) LIKE LOWER(CONCAT('%', :patientName, '%')))
                   AND (:doctorName IS NULL OR LOWER(a.doctor_Name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                  AND (:patientEmail IS NULL OR LOWER(a.patient_email) LIKE LOWER(CONCAT('%', :patientEmail, '%')))
                   AND (:patientId IS NULL or a.patient_id = :patientId)
                   AND (:status IS NULL OR a.status = :status)
+                  AND (a.date_time::date >= :startDate AND a.date_time::date <= :endDate)
                   AND date_time > :now
+                  ORDER BY a.date_time desc
             """, nativeQuery = true)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesLastVersionFuture(
             @Param("patientId") UUID patientId, @Param("patientName") String patientName,
             @Param("doctorName") String doctorName,
             @Param("status") String status,
             @Param("now") OffsetDateTime now,
-            Pageable pageable
+            LocalDate startDate, LocalDate endDate, String patientEmail, Pageable pageable
     );
 
     @Query(value = """
@@ -140,16 +148,19 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
                 )
                   AND (:patientName IS NULL OR LOWER(a.patient_Name) LIKE LOWER(CONCAT('%', :patientName, '%')))
                   AND (:doctorName IS NULL OR LOWER(a.doctor_Name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+                  AND (:patientEmail IS NULL OR LOWER(a.patient_email) LIKE LOWER(CONCAT('%', :patientEmail, '%')))
                   AND (:patientId IS NULL or a.patient_id = :patientId)
                   AND (:status IS NULL OR a.status = :status)
+                  AND (a.date_time::date >= :startDate AND a.date_time::date <= :endDate)
                   AND date_time < :now
+                  ORDER BY a.date_time desc
             """, nativeQuery = true)
     Page<JpaAppointmentHistoryEntity> searchAppointmentHistoriesLastVersionPast(
             @Param("patientId") UUID patientId, @Param("patientName") String patientName,
             @Param("doctorName") String doctorName,
             @Param("status") String status,
             @Param("now") OffsetDateTime now,
-            Pageable pageable
+            LocalDate startDate, LocalDate endDate, String patientEmail, Pageable pageable
     );
 
     @Query(value = """
@@ -157,8 +168,10 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             FROM appointments_history a
             WHERE (:patientName IS NULL OR LOWER(a.patient_name) LIKE LOWER(CONCAT('%', :patientName, '%')))
               AND (:doctorName IS NULL OR LOWER(a.doctor_name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+              AND (:patientEmail IS NULL OR LOWER(a.patient_email) LIKE LOWER(CONCAT('%', :patientEmail, '%')))
               AND (:patientId IS NULL or a.patient_id = :patientId)
               AND (:status IS NULL OR a.status = :status)
+              AND (a.date_time::date >= :startDate AND a.date_time::date <= :endDate)
             ORDER BY a.version DESC, a.date_time DESC
             """,
             nativeQuery = true
@@ -167,7 +180,7 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             @Param("patientId") UUID patientId, @Param("patientName") String patientName,
             @Param("doctorName") String doctorName,
             @Param("status") String status,
-            Pageable pageable
+            LocalDate startDate, LocalDate endDate, String patientEmail, Pageable pageable
     );
 
 
@@ -176,8 +189,10 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             FROM appointments_history a
             WHERE (:patientName IS NULL OR LOWER(a.patient_name) LIKE LOWER(CONCAT('%', :patientName, '%')))
               AND (:doctorName IS NULL OR LOWER(a.doctor_name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+              AND (:patientEmail IS NULL OR LOWER(a.patient_email) LIKE LOWER(CONCAT('%', :patientEmail, '%')))
               AND (:patientId IS NULL or a.patient_id = :patientId)
               AND (:status IS NULL OR a.status = :status)
+              AND (a.date_time::date >= :startDate AND a.date_time::date <= :endDate)
               AND a.date_time > :now
             ORDER BY a.version DESC, a.date_time DESC
             """, nativeQuery = true)
@@ -186,7 +201,7 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             @Param("doctorName") String doctorName,
             @Param("status") String status,
             @Param("now") OffsetDateTime now,
-            Pageable pageable
+            LocalDate startDate, LocalDate endDate, String patientEmail, Pageable pageable
     );
 
     @Query(value = """
@@ -194,8 +209,10 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             FROM appointments_history a
             WHERE (:patientName IS NULL OR LOWER(a.patient_name) LIKE LOWER(CONCAT('%', :patientName, '%')))
               AND (:doctorName IS NULL OR LOWER(a.doctor_name) LIKE LOWER(CONCAT('%', :doctorName, '%')))
+              AND (:patientEmail IS NULL OR LOWER(a.patient_email) LIKE LOWER(CONCAT('%', :patientEmail, '%')))
               AND (:patientId IS NULL or a.patient_id = :patientId)
               AND (:status IS NULL OR a.status = :status)
+              AND (a.date_time::date >= :startDate AND a.date_time::date <= :endDate)
               AND a.date_time < :now
             ORDER BY a.version DESC, a.date_time DESC
             """, nativeQuery = true)
@@ -204,7 +221,7 @@ public interface JpaAppointmentHistoryRepository extends JpaRepository<JpaAppoin
             @Param("doctorName") String doctorName,
             @Param("status") String status,
             @Param("now") OffsetDateTime now,
-            Pageable pageable
+            LocalDate startDate, LocalDate endDate, String patientEmail, Pageable pageable
     );
 
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class FutureAppointmentHistoryQueryPort implements AppointmentHistoryQuer
     }
 
     @Override
-    public Page<JpaAppointmentHistoryEntity> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, String patientName, String doctorName, String status) {
+    public Page<JpaAppointmentHistoryEntity> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, String patientName, String doctorName, String status, LocalDate startDate, LocalDate endDate, String patientEmail) {
 
         if (lastVersionOnly) {
             return repository.searchAppointmentHistoriesLastVersionFuture(
@@ -29,6 +30,9 @@ public class FutureAppointmentHistoryQueryPort implements AppointmentHistoryQuer
                     doctorName,
                     status,
                     OffsetDateTime.now(),
+                    startDate,
+                    endDate,
+                    patientEmail,
                     PageRequest.of(page, size)
             );
         }
@@ -39,6 +43,9 @@ public class FutureAppointmentHistoryQueryPort implements AppointmentHistoryQuer
                 doctorName,
                 status,
                 OffsetDateTime.now(),
+                startDate,
+                endDate,
+                patientEmail,
                 PageRequest.of(page, size)
         );
     }

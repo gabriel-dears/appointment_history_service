@@ -4,6 +4,7 @@ import com.hospital_app.appointment_history_service.application.port.in.appointm
 import com.hospital_app.appointment_history_service.domain.model.AppointmentHistory;
 import com.hospital_app.common.db.pagination.ApplicationPage;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public interface CustomAppointmentHistoryRepository {
@@ -19,7 +20,7 @@ public interface CustomAppointmentHistoryRepository {
             UUID patientId, String patientName,
             String doctorName,
             String status,
-            AppointmentDateTimeScope appointmentDateTimeScope
+            LocalDate startDate, LocalDate endDate, String patientEmail, AppointmentDateTimeScope appointmentDateTimeScope
     );
 
 }

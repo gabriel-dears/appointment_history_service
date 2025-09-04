@@ -9,6 +9,7 @@ import com.hospital_app.appointment_history_service.infra.adapter.in.controller.
 import com.hospital_app.appointment_history_service.infra.adapter.in.controller.graphql.dto.PageInfo;
 import com.hospital_app.common.db.pagination.ApplicationPage;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class FindAllAppointmentHistoryUseCaseImpl implements FindAllAppointmentHistoryUseCase {
@@ -21,7 +22,7 @@ public class FindAllAppointmentHistoryUseCaseImpl implements FindAllAppointmentH
 
 
     @Override
-    public AppointmentHistoryConnection execute(boolean lastVersionOnly, int page, int size, UUID patientId, String patientName, String doctorName, String status, AppointmentDateTimeScope appointmentDateTimeScope) {
+    public AppointmentHistoryConnection execute(boolean lastVersionOnly, int page, int size, UUID patientId, String patientName, String doctorName, String status, LocalDate startDate, LocalDate endDate, String patientEmail, AppointmentDateTimeScope appointmentDateTimeScope) {
         ApplicationPage<AppointmentHistory> historyApplicationPage = customAppointmentHistoryRepository.findAll(
                 lastVersionOnly,
                 page,
@@ -30,6 +31,9 @@ public class FindAllAppointmentHistoryUseCaseImpl implements FindAllAppointmentH
                 patientName,
                 doctorName,
                 status,
+                startDate,
+                endDate,
+                patientEmail,
                 appointmentDateTimeScope
         );
         return new AppointmentHistoryConnection(

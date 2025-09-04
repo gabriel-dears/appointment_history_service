@@ -16,7 +16,11 @@ import java.util.UUID;
 @Table(
         name = "appointments_history",
         indexes = {
-                @Index(name = "idx_appointment_id_version", columnList = "appointment_id, version")
+                @Index(name = "idx_appointment_id_version", columnList = "appointment_id, version"),
+                @Index(name = "idx_appointment_id_date_time", columnList = "appointment_id, date_time"),
+                @Index(name = "idx_patient_id_date_time", columnList = "patient_id, date_time"),
+                @Index(name = "idx_status_date_time", columnList = "status, date_time"),
+                @Index(name = "idx_received_at", columnList = "received_at")
         }
 )
 @Getter

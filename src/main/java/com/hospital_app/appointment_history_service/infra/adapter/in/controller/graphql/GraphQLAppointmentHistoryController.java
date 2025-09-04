@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Controller
@@ -67,6 +68,9 @@ public class GraphQLAppointmentHistoryController {
             @Argument String patientName,
             @Argument String doctorName,
             @Argument String status,
+            @Argument LocalDate startDate,
+            @Argument LocalDate endDate,
+            @Argument String patientEmail,
             Authentication authentication
     ) {
         UUID patientId = getPatientId(authentication);
@@ -78,7 +82,7 @@ public class GraphQLAppointmentHistoryController {
                 patientName,
                 doctorName,
                 status,
-                AppointmentDateTimeScope.PAST
+                startDate, endDate, patientEmail, AppointmentDateTimeScope.PAST
         );
     }
 
@@ -90,6 +94,9 @@ public class GraphQLAppointmentHistoryController {
             @Argument String patientName,
             @Argument String doctorName,
             @Argument String status,
+            @Argument LocalDate startDate,
+            @Argument LocalDate endDate,
+            @Argument String patientEmail,
             Authentication authentication
     ) {
         UUID patientId = getPatientId(authentication);
@@ -101,7 +108,7 @@ public class GraphQLAppointmentHistoryController {
                 patientName,
                 doctorName,
                 status,
-                AppointmentDateTimeScope.FUTURE
+                startDate, endDate, patientEmail, AppointmentDateTimeScope.FUTURE
         );
     }
 
@@ -113,6 +120,9 @@ public class GraphQLAppointmentHistoryController {
             @Argument String patientName,
             @Argument String doctorName,
             @Argument String status,
+            @Argument LocalDate startDate,
+            @Argument LocalDate endDate,
+            @Argument String patientEmail,
             Authentication authentication
     ) {
         UUID patientId = getPatientId(authentication);
@@ -124,6 +134,9 @@ public class GraphQLAppointmentHistoryController {
                 patientName,
                 doctorName,
                 status,
+                startDate,
+                endDate,
+                patientEmail,
                 AppointmentDateTimeScope.ALL
         );
     }

@@ -15,7 +15,8 @@ public class GraphQLScalarsConfig {
                 .scalar(ExtendedScalars.UUID)
                 .scalar(GraphQLScalarType.newScalar(ExtendedScalars.DateTime)
                         .name("OffsetDateTime")
-                        .build());
+                        .build())
+                .scalar(ExtendedScalars.Date);
     }
 
 

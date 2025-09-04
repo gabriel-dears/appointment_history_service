@@ -10,6 +10,7 @@ import com.hospital_app.common.db.pagination.ApplicationPage;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Repository
@@ -54,7 +55,7 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
     }
 
     @Override
-    public ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, String patientName, String doctorName, String status, AppointmentDateTimeScope appointmentDateTimeScope) {
+    public ApplicationPage<AppointmentHistory> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, String patientName, String doctorName, String status, LocalDate startDate, LocalDate endDate, String patientEmail, AppointmentDateTimeScope appointmentDateTimeScope) {
         int validatedPage = Math.max(page, 0);
         int validatedSize = Math.max(size, 1);
 
@@ -65,7 +66,10 @@ public class CustomJpaAppointmentHistoryRepository implements CustomAppointmentH
                 patientId,
                 patientName,
                 doctorName,
-                status
+                status,
+                startDate,
+                endDate,
+                patientEmail
         );
 
         return new ApplicationPage<>(

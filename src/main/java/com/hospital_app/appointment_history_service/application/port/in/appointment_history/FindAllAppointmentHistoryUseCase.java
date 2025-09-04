@@ -2,7 +2,7 @@ package com.hospital_app.appointment_history_service.application.port.in.appoint
 
 import com.hospital_app.appointment_history_service.infra.adapter.in.controller.graphql.dto.AppointmentHistoryConnection;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public interface FindAllAppointmentHistoryUseCase {
@@ -13,5 +13,5 @@ public interface FindAllAppointmentHistoryUseCase {
                                          String patientName,
                                          String doctorName,
                                          String status,
-                                         AppointmentDateTimeScope appointmentDateTimeScope);
+                                         LocalDate startDate, LocalDate endDate, String patientEmail, AppointmentDateTimeScope appointmentDateTimeScope);
 }
