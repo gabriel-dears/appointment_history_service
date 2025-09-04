@@ -19,6 +19,7 @@ public class AppointmentHistoryConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/graphiql/**", "/voyager/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oAuth2Customizer)
