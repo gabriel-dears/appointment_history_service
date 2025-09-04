@@ -3,6 +3,7 @@ package com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.ap
 import com.hospital_app.appointment_history_service.application.port.out.db.appointment_history.AppointmentHistoryByIdQueryPort;
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryEntity;
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryRepository;
+import com.hospital_app.appointment_history_service.infra.db.AppointmentHistoryDbOperationWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +25,9 @@ public class PastAppointmentHistoryByIdQuery implements AppointmentHistoryByIdQu
     public Page<JpaAppointmentHistoryEntity> findByAppointmentId(UUID appointmentId, int page, int size, UUID patientId, boolean lastVersionOnly) {
         Pageable pageable = PageRequest.of(page, size);
         if (lastVersionOnly) {
-            return repository.findByLastVersionAppointmentIdAndDateTimeBefore(patientId, appointmentId, OffsetDateTime.now(), pageable);
+            return AppointmentHistoryDbOperationWrapper.execute(() -> repository.findByLastVersionAppointmentIdAndDateTimeBefore(patientId, appointmentId, OffsetDateTime.now(), pageable));
         } else {
-            return repository.findByPatientIdAndAppointmentIdAndDateTimeBeforeOrderByVersionAsc(patientId, appointmentId, OffsetDateTime.now(), pageable);
+            return AppointmentHistoryDbOperationWrapper.execute(() -> repository.findByPatientIdAndAppointmentIdAndDateTimeBeforeOrderByVersionAsc(patientId, appointmentId, OffsetDateTime.now(), pageable));
         }
     }
 }

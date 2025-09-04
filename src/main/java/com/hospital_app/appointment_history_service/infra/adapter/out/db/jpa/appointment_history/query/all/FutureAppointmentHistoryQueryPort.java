@@ -3,6 +3,7 @@ package com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.ap
 import com.hospital_app.appointment_history_service.application.port.out.db.appointment_history.AppointmentHistoryQueryPort;
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryEntity;
 import com.hospital_app.appointment_history_service.infra.adapter.out.db.jpa.appointment_history.JpaAppointmentHistoryRepository;
+import com.hospital_app.appointment_history_service.infra.db.AppointmentHistoryDbOperationWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class FutureAppointmentHistoryQueryPort implements AppointmentHistoryQuer
     public Page<JpaAppointmentHistoryEntity> findAll(boolean lastVersionOnly, int page, int size, UUID patientId, String patientName, String doctorName, String status, LocalDate startDate, LocalDate endDate, String patientEmail) {
 
         if (lastVersionOnly) {
-            return repository.searchAppointmentHistoriesLastVersionFuture(
+            return AppointmentHistoryDbOperationWrapper.execute(() ->repository.searchAppointmentHistoriesLastVersionFuture(
                     patientId,
                     patientName,
                     doctorName,
@@ -34,10 +35,10 @@ public class FutureAppointmentHistoryQueryPort implements AppointmentHistoryQuer
                     endDate,
                     patientEmail,
                     PageRequest.of(page, size)
-            );
+            ));
         }
 
-        return repository.searchAppointmentHistoriesFuture(
+        return AppointmentHistoryDbOperationWrapper.execute(() -> repository.searchAppointmentHistoriesFuture(
                 patientId,
                 patientName,
                 doctorName,
@@ -47,6 +48,6 @@ public class FutureAppointmentHistoryQueryPort implements AppointmentHistoryQuer
                 endDate,
                 patientEmail,
                 PageRequest.of(page, size)
-        );
+        ));
     }
 }
