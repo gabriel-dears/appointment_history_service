@@ -54,7 +54,7 @@ public class JpaAppointmentHistoryEntity {
     private String doctorName;
 
     @NotNull
-    private OffsetDateTime dateTime;  // changed
+    private OffsetDateTime dateTime;
 
     @NotBlank
     private String status;
@@ -66,12 +66,12 @@ public class JpaAppointmentHistoryEntity {
     private Long version;
 
     @NotNull
-    private OffsetDateTime receivedAt; // changed
+    private OffsetDateTime receivedAt;
 
     @PrePersist
     public void prePersist() {
         if (receivedAt == null) {
-            receivedAt = OffsetDateTime.now();  // use OffsetDateTime
+            receivedAt = OffsetDateTime.now();
         }
     }
 }
