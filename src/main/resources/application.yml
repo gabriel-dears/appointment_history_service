@@ -3,18 +3,18 @@ spring:
     name: appointment_history_service
 
   rabbitmq:
-    host: rabbitmq
-    port: 5671
-    username: guest
-    password: guest
+    host: ${HOSPITAL_APP_RABBITMQ_HOST}
+    port: ${HOSPITAL_APP_RABBITMQ_PORT}
+    username: ${HOSPITAL_APP_RABBITMQ_USER}
+    password: ${HOSPITAL_APP_RABBITMQ_PASS}
     ssl:
-      enabled: true
-      algorithm: TLSv1.2
-      validate-server-certificate: true
-      key-store: classpath:rabbitmq/client_keystore.p12  # convert client.key+client.crt into PKCS12
-      key-store-password: changeit
-      trust-store: classpath:rabbitmq/truststore.p12     # contains CA cert
-      trust-store-password: changeit
+      enabled: ${HOSPITAL_APP_RABBITMQ_SSL_ENABLED}
+      algorithm: ${HOSPITAL_APP_RABBITMQ_SSL_ALGO}
+      validate-server-certificate: ${HOSPITAL_APP_RABBITMQ_SSL_VALIDATE}
+      key-store: ${HOSPITAL_APP_RABBITMQ_KEYSTORE}
+      key-store-password: ${HOSPITAL_APP_RABBITMQ_KEYSTORE_PASS}
+      trust-store: ${HOSPITAL_APP_RABBITMQ_TRUSTSTORE}
+      trust-store-password: ${HOSPITAL_APP_RABBITMQ_TRUSTSTORE_PASS}
 
   datasource:
     url: ${HOSPITAL_APP_APPOINTMENT_HISTORY_SERVICE_DB_URL}
