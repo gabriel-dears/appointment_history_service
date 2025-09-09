@@ -36,10 +36,8 @@ There are two common ways to run this service.
   docker compose up -d appointment-history-service appointment-history-service-db rabbitmq
 - To actually receive events, run appointment-service as well (it publishes the messages):
   docker compose up -d appointment-service appointment-service-db
-- Service base URL (container mapped): http://localhost:8084
-- GraphiQL UI: http://localhost:8084/graphiql
-- Voyager UI: http://localhost:8084/voyager
-- GraphQL endpoint: http://localhost:8084/graphql
+- Service base URL (container mapped): http://localhost:8000/history
+- GraphQL endpoint: http://localhost:8000/history/graphql
 - PostgreSQL (service DB): localhost:5436 (mapped to container 5432)
 
 2) Running via Maven locally
